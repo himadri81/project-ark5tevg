@@ -1,81 +1,49 @@
 <!doctype html>
 <html>
-    <head>
-        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
-        <script>
-            AFRAME.registerComponent('videohandler', {
-                init: function () {
-                    var marker = this.el;
-                    this.vid = document.querySelector("#vid");
 
-                    marker.addEventListener('markerFound', function () {
-                        this.toggle = true;
-                        this.vid.play();
-                    }.bind(this));
+<head>
+	<title>My Page</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- import aframe and then ar.js with image tracking / location based features-->
+	<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+	<!-- style for the loader-->
+	<style>
+		.arjs-loader {
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: rgba(0, 0, 0, 0.8);
+			z-index: 9999;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
-                    marker.addEventListener('markerLost', function () {
-                        this.toggle = false;
-                        this.vid.pause();
-                    }.bind(this));
-                },
-            });
-        </script>
-    </head>
+		.arjs-loader div {
+			text-align: center;
+			font-size: 1.25em;
+			color: white;
+		}
+	</style>
+</head>
 
-    <body style="margin: 0; overflow: hidden;">
-        <a-scene
-            vr-mode-ui="enabled: false"
-            loading-screen="enabled: false;"
-            arjs='sourceType: webcam; debugUIEnabled: false;'
-            id="scene"
-            embedded
-            gesture-detector
-        >
-            <a-assets>
-                <video
-                    id="vid"
-                    src="assets/asset.mp4"
-                    preload="auto"
-                    response-type="arraybuffer"
-                    loop
-                    crossorigin
-                    webkit-playsinline
-                    autoplay
-                    muted
-                    playsinline
-                ></video>
-            </a-assets>
+<body>
+	<!-- minimal loader shown until image descriptors are loaded. Loading may take a while according to the device computational power-->
+	<div class="arjs-loader"></div>
+	<div>Loading, please wait...</div><!-- a-frame scene-->
+	<a-scene vr-mode-ui="enabled: false;" renderer="logarithmicDepthBuffer: true;" embedded=""
+		arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"></a-scene>
+	<!-- a-nft is the anchor that defines an Image Tracking entity-->
+	<a-nft type="nft" url="assets/image_1655965869930" smooth="true" smoothcount="10" smoothtolerance=".01"
+		smooththreshold="5">
+		<!-- as a child of the a-nft entity, you can define the content to show. here's a GLTF model entity-->
+		<a-box position="0 1 0" material="color: blue;"></a-box>
+	</a-nft><!-- static camera that moves according to the device movemenents-->
+	<a-entity camera=""></a-entity>
+</body>
 
-            <a-marker
-                type="pattern"
-                preset="custom"
-                url="assets/marker.patt"
-                videohandler
-                smooth="true"
-                smoothCount="10"
-                smoothTolerance="0.01"
-                smoothThreshold="5"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
-                id="markerA"
-            >
-                <!--
-                <a-video
-                    src="#vid"
-                    scale="1 1 1"
-                    position="0 0.1 0"
-                    rotation="-90 0 0"
-                    class="clickable"
-                    gesture-handler
-                ></a-video> -->
-                <a-box position="0 1 0" material="color: blue;"></a-box>
-            </a-marker>
-
-            <a-entity camera></a-entity>
-        </a-scene>
-    </body>
 </html>
